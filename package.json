@@ -6,13 +6,16 @@
   "author": "elkhoudiry <ahmedelkhodery2@Gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "yarn --cwd ./server/ dev",
-    "build": "yarn --cwd ./server/ install && yarn --cwd ./server/ build",
-    "start": "yarn --cwd ./server/ start"
+    "dev": "lerna run dev --stream",
+    "build": "yarn lerna bootstrap && lerna run build --stream",
+    "start": "lerna run start --stream"
   },
   "devDependencies": {
     "@types/node": "^16.9.1",
     "typescript": "^4.4.3",
     "yarn": "^1.22.11"
+  },
+  "dependencies": {
+    "lerna": "^4.0.0"
   }
 }
