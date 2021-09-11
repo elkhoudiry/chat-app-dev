@@ -9,5 +9,8 @@
     "dev": "yarn --cwd ./server/ dev",
     "build": "yarn --cwd ./server/ build",
     "start": "yarn --cwd ./server/ start"
+  },
+  "devDependencies": {
+    "yarn": "^1.22.11"
   }
 }
