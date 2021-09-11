@@ -4,6 +4,7 @@ import { Server } from "socket.io";
 import logging from "./utils/logging";
 import config from "./utils/config";
 import pingRoutes from "./routes/ping";
+import path from "path";
 
 const NAMESPACE = "server";
 
@@ -14,6 +15,7 @@ const io = new Server(server);
 /** Parse the request */
 router.use(express.urlencoded({ extended: false }));
 router.use(express.json());
+router.use(express.static(path.join(__dirname, "../client/build")));
 
 /** Logging requests */
 router.use((req, res, next) => {
@@ -52,6 +54,10 @@ router.use((req, res, next) => {
 
 /** Routes */
 router.use("/", pingRoutes);
+
+router.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/../client/build/index.html"));
+});
 
 /** Errors handle */
 router.use((req, res, next) => {
