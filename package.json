@@ -7,10 +7,11 @@
   "license": "MIT",
   "scripts": {
     "dev": "yarn --cwd ./server/ dev",
-    "build": "yarn --cwd ./server/ build",
+    "build": "yarn --cwd ./server/ install && yarn --cwd ./server/ build",
     "start": "yarn --cwd ./server/ start"
   },
   "devDependencies": {
+    "typescript": "^4.4.3",
     "yarn": "^1.22.11"
   }
 }
