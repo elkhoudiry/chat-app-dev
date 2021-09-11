@@ -1,17 +1,22 @@
+import http from "http";
 import express from "express";
+import { Server } from "socket.io";
 import logging from "./utils/logging";
 import config from "./utils/config";
 import pingRoutes from "./routes/ping";
 
 const NAMESPACE = "server";
-const app = express();
+
+const router = express();
+const server = http.createServer(router);
+const io = new Server(server);
 
 /** Parse the request */
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+router.use(express.urlencoded({ extended: false }));
+router.use(express.json());
 
 /** Logging requests */
-app.use((req, res, next) => {
+router.use((req, res, next) => {
   logging.info(
     NAMESPACE,
     `METHOD - [${req.method}], URL - [${req.url}], IP - [${req.socket.remoteAddress}]`
@@ -29,7 +34,7 @@ app.use((req, res, next) => {
 });
 
 /** Rules */
-app.use((req, res, next) => {
+router.use((req, res, next) => {
   // TODO remove in production with predefined routes & origins
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
@@ -46,17 +51,17 @@ app.use((req, res, next) => {
 });
 
 /** Routes */
-app.use("/", pingRoutes);
+router.use("/", pingRoutes);
 
 /** Errors handle */
-app.use((req, res, next) => {
+router.use((req, res, next) => {
   const err = new Error("oh not found!");
 
   return res.status(404).json(err.message);
 });
 
 /** Start Server */
-app.listen(config.server.port, () =>
+server.listen(config.server.port, () =>
   logging.info(
     NAMESPACE,
     `Server started on ${config.server.hostname}:${config.server.port}`
