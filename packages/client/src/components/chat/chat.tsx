@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, SyntheticEvent } from "react"
 import { Location } from "history"
 import queryString from "query-string"
 import io, { Socket } from "socket.io-client"
 import dotenv from "dotenv"
+import {ChatMessage} from "../../models/chat_message"
 
 import "./chat.css"
 
@@ -14,6 +15,8 @@ const Chat = ({ location }: { location: Location }) => {
 
     const [clientName, setClientName] = useState("")
     const [clientEmail, setClientEmail] = useState("")
+    const [message, setMessage] = useState("")
+    const [messages, setMessages] = useState<Array<ChatMessage>>([])
     const ENDPOINT = process.env.REACT_APP_ENDPOINT || `localhost:${process.env.PORT}`
 
     useEffect(() => {
@@ -27,19 +30,60 @@ const Chat = ({ location }: { location: Location }) => {
         if (!clientName || !clientEmail) return
 
         socket = io(ENDPOINT)
-        socket.emit('join', { clientName, clientEmail })
+        socket.emit("joining-chat", { clientName, clientEmail }, ({ error }: { error: string | undefined | null  } = { error: null}) => {
+            // TODO handle this error
+
+            if (error) {
+                alert(error)
+                disconnectConnection()
+                return
+            }
+
+            socket.emit("join-chat", () => {
+                setMessages([])
+            })
+        })
 
         return () => {
-            if (socket && socket.connected) {
-                socket.emit("leave", { clientName, clientEmail })
+            disconnectConnection()
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ENDPOINT, clientEmail, clientName, location.search])
+
+    useEffect(() => {
+        if (!socket) return
+
+        socket.on("chat-message", (message: ChatMessage) => {
+            console.log(message)
+            setMessages([...messages, message])
+        })
+    }, [messages])
+
+    const sendMessage = (event: SyntheticEvent) => {
+        event.preventDefault()
+        if (message) {
+            socket.emit("send-chat-message", message, () => {
+            console.log("all messages:", messages)
+            setMessages([...messages, {sender: clientName, message: message}])
+            setMessage("")
+            })
+        }
+    }
+
+    const disconnectConnection = () =>{
+        if (socket && socket.connected) {
+                socket.emit("leave-chat", { clientName, clientEmail })
                 socket.disconnect()
                 socket.off()
             }
-        }
-    }, [ENDPOINT, clientEmail, clientName, location.search])
+    }
 
     return (
-        <h1>Chat !</h1>
+        <div className="outerContainer">
+            <div className="container">
+                <input value={message} onChange={(event) => setMessage(event.target.value)} onKeyPress={event => event.key === 'Enter' ? sendMessage(event) : null} />
+            </div>
+        </div>
     )
 }
 
