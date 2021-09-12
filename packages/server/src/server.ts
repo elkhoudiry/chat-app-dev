@@ -4,6 +4,7 @@ import { Server } from "socket.io";
 import logging from "./utils/logging";
 import config from "./utils/config";
 import apiRoutes from "./routes/api";
+import client from "./socket/client";
 import path from "path";
 
 const NAMESPACE = "server";
@@ -54,11 +55,9 @@ router.use((req, res, next) => {
 
 /** Socket.IO Handler */
 io.on('connection', (socket) => {
-  console.log('new socket connection!!')
+  logging.info(NAMESPACE, 'new socket connection!')
 
-  socket.on('disconnect', () => {
-    console.log('socket closed')
-  })
+  client.handleClient(socket)
 })
 
 /** Routes */
