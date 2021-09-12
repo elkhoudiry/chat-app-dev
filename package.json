@@ -7,8 +7,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "lerna run dev --stream",
-    "build": "yarn lerna bootstrap && lerna run build --stream",
-    "start": "lerna run start --stream --scope=server"
+    "build": "lerna bootstrap && lerna run build --stream",
+    "start": "lerna run start --stream --scope chat-app-server"
   },
   "devDependencies": {
     "@types/node": "^16.9.1",
