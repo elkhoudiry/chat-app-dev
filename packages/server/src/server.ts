@@ -52,6 +52,15 @@ router.use((req, res, next) => {
   next();
 });
 
+/** Socket.IO Handler */
+io.on('connection', (socket) => {
+  console.log('new socket connection!!')
+
+  socket.on('disconnect', () => {
+    console.log('socket closed')
+  })
+})
+
 /** Routes */
 router.use("/api", apiRoutes);
 
