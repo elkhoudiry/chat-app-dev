@@ -54,10 +54,10 @@ router.use((req, res, next) => {
 });
 
 /** Socket.IO Handler */
-io.on('connection', (socket) => {
-  logging.info(NAMESPACE, 'new socket connection!')
-  connection.handleConnection(socket)
-})
+io.on("connection", (socket) => {
+  logging.info(NAMESPACE, `id: ${socket.id}, new socket connection!`);
+  connection.handleConnection(socket);
+});
 
 /** Routes */
 router.use("/api", apiRoutes);
