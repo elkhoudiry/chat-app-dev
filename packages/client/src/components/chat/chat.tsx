@@ -29,6 +29,13 @@ const Chat = ({ location }: { location: Location }) => {
         socket = io(ENDPOINT)
         socket.emit('join', { clientName, clientEmail })
 
+        return () => {
+            if (socket && socket.connected) {
+                socket.emit("leave", { clientName, clientEmail })
+                socket.disconnect()
+                socket.off()
+            }
+        }
     }, [ENDPOINT, clientEmail, clientName, location.search])
 
     return (

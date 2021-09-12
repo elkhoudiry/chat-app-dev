@@ -6,13 +6,15 @@ const NAMESPACE = "client"
 function handleClient(socket: Socket) {
 
     socket.on("join", ({ clientName, clientEmail }) => {
-        
-        logging.info(NAMESPACE, `client ${clientName} - ${clientEmail} has joined!`)
+        logging.info(NAMESPACE, `client name: ${clientName}, email: ${clientEmail}, id: ${socket.id}, has joined!`)
+    })
 
+    socket.on("leave", ({ clientName, clientEmail }) => {
+        logging.info(NAMESPACE, `client name: ${clientName}, email: ${clientEmail}, id: ${socket.id}, has left!`)
     })
 
     socket.on("disconnect", () => {
-        logging.info(NAMESPACE, `socket closed!`)
+        logging.info(NAMESPACE, `socket id: ${socket.id} closed!`)
   })
 }
 
