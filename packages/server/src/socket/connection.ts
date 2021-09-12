@@ -3,8 +3,8 @@ import logging from '../utils/logging'
 
 const NAMESPACE = "client"
 
-function handleClient(socket: Socket) {
-
+/** Handle initial socket connection event */
+function handleConnection(socket: Socket) {
     socket.on("join", ({ clientName, clientEmail }) => {
         logging.info(NAMESPACE, `client name: ${clientName}, email: ${clientEmail}, id: ${socket.id}, has joined!`)
     })
@@ -19,5 +19,5 @@ function handleClient(socket: Socket) {
 }
 
 export default {
-    handleClient
+    handleConnection: handleConnection
 }

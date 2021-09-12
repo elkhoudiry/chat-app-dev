@@ -4,7 +4,7 @@ import { Server } from "socket.io";
 import logging from "./utils/logging";
 import config from "./utils/config";
 import apiRoutes from "./routes/api";
-import client from "./socket/client";
+import connection from "./socket/connection";
 import path from "path";
 
 const NAMESPACE = "server";
@@ -56,8 +56,7 @@ router.use((req, res, next) => {
 /** Socket.IO Handler */
 io.on('connection', (socket) => {
   logging.info(NAMESPACE, 'new socket connection!')
-
-  client.handleClient(socket)
+  connection.handleConnection(socket)
 })
 
 /** Routes */

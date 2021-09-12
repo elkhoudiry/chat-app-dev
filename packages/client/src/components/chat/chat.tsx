@@ -14,7 +14,7 @@ const Chat = ({ location }: { location: Location }) => {
 
     const [clientName, setClientName] = useState("")
     const [clientEmail, setClientEmail] = useState("")
-    const ENDPOINT = process.env.REACT_APP_ENDPOINT || ""
+    const ENDPOINT = process.env.REACT_APP_ENDPOINT || `localhost:${process.env.PORT}`
 
     useEffect(() => {
         const { name, email } = queryString.parse(location.search)
