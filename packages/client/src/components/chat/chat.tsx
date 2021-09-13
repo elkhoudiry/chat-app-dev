@@ -22,43 +22,40 @@ const Chat = ({ location }: { location: Location }) => {
     const ENDPOINT = process.env.REACT_APP_ENDPOINT || `localhost:${process.env.PORT}`
 
     useEffect(() => {
-        const { name, email } = queryString.parse(location.search)
+        let { name, email } = queryString.parse(location.search)
 
         if (!name || !email) return
 
-        setClientName(Array.isArray(name) ? name[0] : name)
-        setClientEmail(Array.isArray(email) ? email[0] : email)
+        name = Array.isArray(name) ? name[0] : name
+        email = Array.isArray(email) ? email[0] : email
+
+        setClientName(name)
+        setClientEmail(email)
 
         if (!clientName || !clientEmail) return
 
         socket = io(ENDPOINT)
-        socket.emit("joining-chat", { clientName, clientEmail }, ({ error }: { error: string | undefined | null } = { error: null }) => {
-            // TODO handle this error
 
+        socket.on("chat-message", (message: ChatMessage) => {
+            setMessages([...messages, message])
+        })
+
+        socket.emit("joining-chat", { name, email }, ({ error }: { error: string | undefined | null } = { error: null }) => {
+            // TODO handle this error
             if (error) {
                 alert(error)
                 disconnectConnection()
                 return
             }
 
-            socket.emit("join-chat", () => {
-                setMessages([])
-            })
+            socket.emit("join-chat")
         })
 
         return () => {
             disconnectConnection()
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [ENDPOINT, clientEmail, clientName, location.search])
-
-    useEffect(() => {
-        if (!socket) return
-
-        socket.on("chat-message", (message: ChatMessage) => {
-            setMessages([...messages, message])
-        })
-    }, [messages])
+    }, [ENDPOINT, location.search])
 
     const sendMessage = (event: SyntheticEvent) => {
         event.preventDefault()
