@@ -3,12 +3,12 @@ import { ActiveClient } from "../models/active_client";
 const activeClients: Array<ActiveClient> = [];
 
 /** Adds a client to the current active clients list */
-function addClient(socketId: string, name: string, email: string) {
+function addClient(socketId: string, name: string, email: string, to: string) {
   const existingClient = activeClients.find((client) => client.email === email);
 
   if (existingClient) return { error: "Email already exists" };
 
-  const client = { socketId, id: 0, name, email };
+  const client = { socketId, id: 0, to, name, email };
   activeClients.push(client);
   return { client };
 }
