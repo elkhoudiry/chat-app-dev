@@ -32,7 +32,7 @@ const Chat = ({ location }: { location: Location }) => {
         setClientName(name)
         setClientEmail(email)
 
-        if (!clientName || !clientEmail) return
+        if (!name || !email) return
 
         socket = io(ENDPOINT)
 
