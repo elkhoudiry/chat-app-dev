@@ -1,6 +1,7 @@
 # Sample chat app
 
-just a sample chat app for now !
+just a sample chat app for now !  
+tools used: express, socket io, react
 
 ## Pics
 
