@@ -9,13 +9,6 @@ const Join = () => {
     const [email, setEmail] = useState("")
 
     useEffect(() => {
-        if (process.env.REACT_APP_LOCAL && !name) {
-            import("./test_data").then((module: { users: Array<any> }) => {
-                const user = module.users[Math.floor(Math.random() * 200)];
-                setName(`${user.first_name} ${user.last_name}`)
-                setEmail(user.email)
-            })
-        }
         return () => { }
     }, [name, email])
 
