@@ -7,7 +7,7 @@ import { ChatMessage } from "../../models/chat_message"
 
 import "./chat.css"
 
-import { Infobar } from '../index'
+import { Infobar, Input } from '../index'
 
 dotenv.config()
 
@@ -56,7 +56,6 @@ const Chat = ({ location }: { location: Location }) => {
         if (!socket) return
 
         socket.on("chat-message", (message: ChatMessage) => {
-            console.log(message)
             setMessages([...messages, message])
         })
     }, [messages])
@@ -65,7 +64,6 @@ const Chat = ({ location }: { location: Location }) => {
         event.preventDefault()
         if (message) {
             socket.emit("send-chat-message", message, () => {
-                console.log("all messages:", messages)
                 setMessages([...messages, { sender: clientName, message: message }])
                 setMessage("")
             })
@@ -84,7 +82,7 @@ const Chat = ({ location }: { location: Location }) => {
         <div className="outerContainer">
             <div className="container">
                 <Infobar />
-                {/* <input value={message} onChange={(event) => setMessage(event.target.value)} onKeyPress={event => event.key === 'Enter' ? sendMessage(event) : null} /> */}
+                <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
             </div>
         </div>
     )
