@@ -9,9 +9,7 @@ import { ChatMessage } from '../../../models/chat_message';
 const Message = ({ message, name }: { message: ChatMessage, name: string }) => {
     let isSentByCurrentUser = false;
 
-    const trimmedName = name.trim().toLowerCase();
-
-    if (message.sender === trimmedName) {
+    if (message.sender === name) {
         isSentByCurrentUser = true;
     }
 
@@ -19,7 +17,7 @@ const Message = ({ message, name }: { message: ChatMessage, name: string }) => {
         isSentByCurrentUser
             ? (
                 <div className="messageContainer justifyEnd">
-                    <p className="sentText pr-10">{trimmedName}</p>
+                    <p className="sentText pr-10">{name}</p>
                     <div className="messageBox backgroundBlue">
                         <p className="messageText colorWhite">{ReactEmoji.emojify(message.message)}</p>
                     </div>
