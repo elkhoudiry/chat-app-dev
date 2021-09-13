@@ -6,12 +6,16 @@ import config from "./utils/config";
 import apiRoutes from "./routes/api";
 import connection from "./socket/connection";
 import path from "path";
+import cors from "cors";
 
 const NAMESPACE = "server";
 
 const router = express();
 const server = http.createServer(router);
 const io = new Server(server);
+
+/** Allow cors */
+router.use(cors());
 
 /** Parse the request */
 router.use(express.urlencoded({ extended: false }));
