@@ -13,7 +13,7 @@ function handleChatClient(socket: Socket, client: ActiveClient) {
   socket.on("join-chat", (callback) => {
     logging.info(
       NAMESPACE,
-      `client name: ${client!.name}, email: ${room}, id: ${client!.socketId
+      `client name: ${client!.name}, email: ${client!.email}, id: ${client!.socketId
       }, has joined chat!`
     );
 
