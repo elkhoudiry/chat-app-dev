@@ -3,9 +3,11 @@ import { Location } from "history"
 import queryString from "query-string"
 import io, { Socket } from "socket.io-client"
 import dotenv from "dotenv"
-import {ChatMessage} from "../../models/chat_message"
+import { ChatMessage } from "../../models/chat_message"
 
 import "./chat.css"
+
+import { Infobar } from '../index'
 
 dotenv.config()
 
@@ -30,7 +32,7 @@ const Chat = ({ location }: { location: Location }) => {
         if (!clientName || !clientEmail) return
 
         socket = io(ENDPOINT)
-        socket.emit("joining-chat", { clientName, clientEmail }, ({ error }: { error: string | undefined | null  } = { error: null}) => {
+        socket.emit("joining-chat", { clientName, clientEmail }, ({ error }: { error: string | undefined | null } = { error: null }) => {
             // TODO handle this error
 
             if (error) {
@@ -47,7 +49,7 @@ const Chat = ({ location }: { location: Location }) => {
         return () => {
             disconnectConnection()
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ENDPOINT, clientEmail, clientName, location.search])
 
     useEffect(() => {
@@ -63,25 +65,26 @@ const Chat = ({ location }: { location: Location }) => {
         event.preventDefault()
         if (message) {
             socket.emit("send-chat-message", message, () => {
-            console.log("all messages:", messages)
-            setMessages([...messages, {sender: clientName, message: message}])
-            setMessage("")
+                console.log("all messages:", messages)
+                setMessages([...messages, { sender: clientName, message: message }])
+                setMessage("")
             })
         }
     }
 
-    const disconnectConnection = () =>{
+    const disconnectConnection = () => {
         if (socket && socket.connected) {
-                socket.emit("leave-chat", { clientName, clientEmail })
-                socket.disconnect()
-                socket.off()
-            }
+            socket.emit("leave-chat", { clientName, clientEmail })
+            socket.disconnect()
+            socket.off()
+        }
     }
 
     return (
         <div className="outerContainer">
             <div className="container">
-                <input value={message} onChange={(event) => setMessage(event.target.value)} onKeyPress={event => event.key === 'Enter' ? sendMessage(event) : null} />
+                <Infobar />
+                {/* <input value={message} onChange={(event) => setMessage(event.target.value)} onKeyPress={event => event.key === 'Enter' ? sendMessage(event) : null} /> */}
             </div>
         </div>
     )
