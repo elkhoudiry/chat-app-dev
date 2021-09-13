@@ -22,12 +22,15 @@ const Chat = ({ location }: { location: Location }) => {
     const ENDPOINT = process.env.REACT_APP_ENDPOINT || `localhost:${process.env.PORT}`
 
     useEffect(() => {
-        let { name, email } = queryString.parse(location.search)
+        let { name, email, to } = queryString.parse(location.search)
 
         if (!name || !email) return
 
         name = Array.isArray(name) ? name[0] : name
         email = Array.isArray(email) ? email[0] : email
+        to = Array.isArray(to) ? to[0] : to
+
+        if (!to) to = email
 
         setClientName(name)
         setClientEmail(email)
@@ -37,17 +40,16 @@ const Chat = ({ location }: { location: Location }) => {
         socket = io(ENDPOINT)
 
         socket.on("chat-message", (message: ChatMessage) => {
-            setMessages([...messages, message])
+            setMessages(messages => [...messages, message])
         })
 
-        socket.emit("joining-chat", { name, email }, ({ error }: { error: string | undefined | null } = { error: null }) => {
+        socket.emit("joining-chat", { name, email, to }, ({ error }: { error: string | undefined | null } = { error: null }) => {
             // TODO handle this error
             if (error) {
                 alert(error)
                 disconnectConnection()
                 return
             }
-
             socket.emit("join-chat")
         })
 

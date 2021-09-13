@@ -7,11 +7,13 @@ const NAMESPACE = "chat-client";
 
 /** Handle chat client events */
 function handleChatClient(socket: Socket, client: ActiveClient) {
+
+  const room = client.to
+
   socket.on("join-chat", (callback) => {
     logging.info(
       NAMESPACE,
-      `client name: ${client!.name}, email: ${client!.email}, id: ${
-        client!.socketId
+      `client name: ${client!.name}, email: ${room}, id: ${client!.socketId
       }, has joined chat!`
     );
 
@@ -22,19 +24,19 @@ function handleChatClient(socket: Socket, client: ActiveClient) {
       message: `Welcome ${client!.name}, you have successfully joined chat`,
     });
 
-    socket.broadcast.to(client!.email).emit("chat-message", {
+    socket.broadcast.to(room).emit("chat-message", {
       sender: "admin",
       message: `${client!.name} has joined!`,
     });
 
-    socket.join(client!.email);
+    socket.join(room);
   });
 
   socket.on("send-chat-message", (message, callback) => {
     const client = getClient(socket.id);
     callback();
 
-    socket.broadcast.to(client!.email).emit("chat-message", {
+    socket.broadcast.to(room).emit("chat-message", {
       sender: client?.name,
       message: message,
     });
@@ -48,7 +50,12 @@ function handleChatClient(socket: Socket, client: ActiveClient) {
   });
 
   socket.on("disconnect", () => {
+    socket.broadcast.to(room).emit("chat-message", {
+      sender: "admin",
+      message: `${client!.name} has left!`,
+    });
     removeClient(socket.id);
+    socket.disconnect()
   });
 }
 
