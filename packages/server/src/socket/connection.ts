@@ -7,13 +7,13 @@ const NAMESPACE = "connection";
 
 /** Handle initial socket connection events */
 function handleConnection(socket: Socket) {
-  socket.on("joining-chat", ({ clientName, clientEmail }, callback) => {
+  socket.on("joining-chat", ({ name, email }, callback) => {
     logging.info(
       NAMESPACE,
-      `client name: ${clientName}, email: ${clientEmail}, id: ${socket.id}, is joining chat!`
+      `client name: ${name}, email: ${email}, id: ${socket.id}, is joining chat!`
     );
 
-    const { error, client } = addClient(socket.id, clientName, clientEmail);
+    const { error, client } = addClient(socket.id, name, email);
 
     if (error) {
       if (callback) callback({ error });
