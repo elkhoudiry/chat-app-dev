@@ -7,7 +7,7 @@ import { ChatMessage } from "../../models/chat_message"
 
 import "./chat.css"
 
-import { Infobar, Input } from '../index'
+import { Infobar, Input, Messages } from '../index'
 
 dotenv.config()
 
@@ -82,6 +82,7 @@ const Chat = ({ location }: { location: Location }) => {
         <div className="outerContainer">
             <div className="container">
                 <Infobar />
+                <Messages messages={messages} name={clientName} />
                 <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
             </div>
         </div>
