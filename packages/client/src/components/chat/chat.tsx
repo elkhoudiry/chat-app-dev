@@ -19,7 +19,7 @@ const Chat = ({ location }: { location: Location }) => {
     const [clientEmail, setClientEmail] = useState("")
     const [message, setMessage] = useState("")
     const [messages, setMessages] = useState<Array<ChatMessage>>([])
-    const ENDPOINT = process.env.REACT_APP_ENDPOINT || `localhost:${process.env.PORT}`
+    const ENDPOINT = `https://elkhoudiry-chat-app.herokuapp.com/`
 
     useEffect(() => {
         const { name, email } = queryString.parse(location.search)
