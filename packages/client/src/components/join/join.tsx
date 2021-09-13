@@ -22,7 +22,7 @@ const Join = () => {
     return (
         <div className="joinOuterContainer">
             <div className="joinInnerContainer">
-                <h1 className="heading">Join</h1>
+                <h1 className="heading">Contact Ahmed Elkhoudiry</h1>
                 <div><input placeholder="Name" className="joinInput" type="text" onChange={(event) => setName(event.target.value)} value={name} /></div>
                 <div><input placeholder="Email" className="joinInput mt-20" type="text" onChange={(event) => setEmail(event.target.value)} value={email} /></div>
                 <Link onClick={event => (!name || !email) ? event.preventDefault() : null} to={`/chat?name=${name}&email=${email}`}>
