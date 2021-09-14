@@ -1,11 +1,15 @@
 import nodemailer from 'nodemailer'
 import logging from './logging';
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const NAMESPACE = "email"
 
 const transporter = nodemailer.createTransport({
-    service: "smtp-relay.sendinblue.com",
+    host: "smtp-relay.sendinblue.com",
     port: 587,
+    secure: false,
     auth: {
         user: process.env.MAIL_USER,
         pass: process.env.MAIL_SECRET,
@@ -14,10 +18,11 @@ const transporter = nodemailer.createTransport({
 
 const sendMail = (email: string) => {
     const mailOptions = {
-        from: 'Elkhoudiry Chat App',
+        from: `Elkhoudiry <${process.env.MAIL_USER}`,
         to: email,
         subject: 'Chat join confirmation',
-        text: "this mail to inform you, you have joined chat"
+        text: "this mail to inform you, you have joined chat",
+        html: "<body><h1>Hello!</h1><p>this mail to inform you, you have joined chat</p></body>"
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
