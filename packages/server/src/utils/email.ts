@@ -17,13 +17,13 @@ const transporter = nodemailer.createTransport({
 
 logging.info(NAMESPACE, `user: ${process.env.MAIL_USER}, secret: ${process.env.MAIL_SECRET}`)
 
-const sendMail = (email: string) => {
+const sendMail = (email: string, title: string, body: string) => {
     const mailOptions = {
         from: `Elkhoudiry <${process.env.MAIL_USER}`,
         to: email,
         subject: 'Chat join confirmation',
-        text: "this mail to inform you, you have joined chat",
-        html: "<body><h1>Hello!</h1><p>this mail to inform you, you have joined chat</p></body>"
+        text: `${title}\n${body}`,
+        html: `<body><h1>${title}</h1><p>${body}</p></body>`
     };
 
     transporter.sendMail(mailOptions, (error, info) => {

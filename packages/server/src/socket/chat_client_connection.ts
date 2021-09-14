@@ -20,8 +20,6 @@ function handleChatClient(socket: Socket, client: ActiveClient) {
 
     if (callback) callback();
 
-    sendMail(client.email)
-
     socket.emit("chat-message", {
       sender: "admin",
       message: `Welcome ${client!.name}, you have successfully joined chat`,
