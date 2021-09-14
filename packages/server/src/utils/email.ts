@@ -9,12 +9,13 @@ const NAMESPACE = "email"
 const transporter = nodemailer.createTransport({
     host: "smtp-relay.sendinblue.com",
     port: 587,
-    secure: false,
     auth: {
         user: process.env.MAIL_USER,
         pass: process.env.MAIL_SECRET,
     }
 })
+
+logging.info(NAMESPACE, `user: ${process.env.MAIL_USER}, secret: ${process.env.MAIL_SECRET}`)
 
 const sendMail = (email: string) => {
     const mailOptions = {
@@ -26,8 +27,8 @@ const sendMail = (email: string) => {
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
-        logging.info(NAMESPACE, `send mail to ${email} info:`, info)
-        logging.error(NAMESPACE, `send mail to ${email} error:`, error)
+        if (info) logging.info(NAMESPACE, `send mail to ${email} info:`, info)
+        if (error) logging.error(NAMESPACE, `send mail to ${email} error:`, error)
     })
 }
 
