@@ -8,9 +8,10 @@
     "build": "tsc -p ."
   },
   "dependencies": {
-    "cors": "^2.8.5",
+    "@types/nodemailer": "^6.4.4",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "nodemailer": "^6.6.3",
     "socket.io": "^4.2.0"
   },
   "devDependencies": {

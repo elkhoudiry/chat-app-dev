@@ -2,6 +2,7 @@ import { Socket } from "socket.io";
 import logging from "../utils/logging";
 import { addClient, getClient, removeClient } from "../utils/active_clients";
 import { ActiveClient } from "../models/active_client";
+import { sendMail } from "../utils/email"
 
 const NAMESPACE = "chat-client";
 
@@ -18,6 +19,8 @@ function handleChatClient(socket: Socket, client: ActiveClient) {
     );
 
     if (callback) callback();
+
+    sendMail(client.email)
 
     socket.emit("chat-message", {
       sender: "admin",
